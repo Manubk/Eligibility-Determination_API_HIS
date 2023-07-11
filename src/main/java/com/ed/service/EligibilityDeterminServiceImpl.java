@@ -2,6 +2,7 @@ package com.ed.service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Delayed;
@@ -282,6 +283,32 @@ public class EligibilityDeterminServiceImpl implements IEligibilityDeterminServi
 	private Integer getAge(LocalDate dob) {
 		log.info("getAge dob = "+dob);
 		return Period.between(dob, LocalDate.now()).getYears();
+	}
+
+	@Override
+	public List<EligibilityDeterminDto> findEligibilityByAppId(Long appId) {
+		log.info("findEligibilityByAppId appID = "+appId);
+		
+		List<DcCase> cases = caseRepo.findByAppId(appId);
+		List<EligibilityDeterminDto> eligibilityDtos = null;
+		if(cases != null ) {
+			 eligibilityDtos = new ArrayList<>();
+			
+			for(DcCase dcCase : cases) {
+				
+				EligibilityDeterminEntity eligibility = eligibilityRepo.findByCaseNum(dcCase.getCaseNum());
+				
+				//If Eligibility exist then only get eligibility of that case
+				if(eligibility != null) {
+				EligibilityDeterminDto eligibilityDto = new EligibilityDeterminDto();
+				BeanUtils.copyProperties(eligibility, eligibilityDto);
+				eligibilityDtos.add(eligibilityDto);
+				}
+			}
+			
+		}
+		
+		return eligibilityDtos;
 	}
 	
 }

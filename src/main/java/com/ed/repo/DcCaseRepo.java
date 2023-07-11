@@ -13,4 +13,8 @@ import java.util.List;
 public interface DcCaseRepo extends JpaRepository<DcCase,Serializable> {
 	
 	public DcCase findByCaseNum(Long caseNum);
+	
+	public List<DcCase> findByAppId(Long appId);
+
+
 }

@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class EligibilityDeterminDto {
 	
+	private Long eligDeterminId;
+	
 	private String planName;
 	
 	private String planStatus;
